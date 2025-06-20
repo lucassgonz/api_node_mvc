@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lista de Usuários</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+</style>
+</head>
+<body>
+
+<h1>Usuários Cadastrados</h1>
+
+<table id="usuariosTable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<script>
+  async function carregarUsuarios() {
+    try {
+const response = await fetch('http://localhost:3000/api/usuarios');
+      if (!response.ok) {
+        throw new Error('Erro ao buscar usuários: ' + response.status);
+      }
+      const usuarios = await response.json();
+
+      const tbody = document.querySelector('#usuariosTable tbody');
+      tbody.innerHTML = ''; 
+
+      usuarios.forEach(usuario => {
+        const tr = document.createElement('tr');
+
+        const tdId = document.createElement('td');
+        tdId.textContent = usuario.id;
+        tr.appendChild(tdId);
+
+        const tdNome = document.createElement('td');
+        tdNome.textContent = usuario.nome;
+        tr.appendChild(tdNome);
+
+        const tdEmail = document.createElement('td');
+        tdEmail.textContent = usuario.email;
+        tr.appendChild(tdEmail);
+
+        tbody.appendChild(tr);
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  window.onload = carregarUsuarios;
+</script>
+
+</body>
+</html>
